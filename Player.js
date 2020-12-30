@@ -15,11 +15,11 @@ class Player{
 
     async stand(){
         if (!this.flip){
-            var stand = new DrawImage('images/standing.png', this.x, this.y, this.width, this.height);
-            await stand.draw;
+            var stand = new DrawImage();
+            await stand.draw('images/standing.png', this.x, this.y, this.width, this.height);
         } else {
-            var stand = new DrawImage('images/standing.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
-            await stand.draw;
+            var stand = new DrawImage();
+            await stand.draw('images/standing.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
         }
     }
     
@@ -31,8 +31,8 @@ class Player{
         await clear.draw;
 
         this.x += this.move_speed/3;
-        var walk1 = new DrawImage('images/walk//walking1.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
-        await walk1.draw;
+        var walk1 = new DrawImage();
+        await walk1.draw('images/walk//walking1.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
 
         await timeout(this.move_total_time/3);
          
@@ -41,8 +41,8 @@ class Player{
 
         this.x += this.move_speed/3;
 
-        var walk1 = new DrawImage('images/walk//walking2.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
-        await walk1.draw;
+        var walk1 = new DrawImage();
+        await walk1.draw('images/walk//walking2.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
 
         await timeout(this.move_total_time/3);
         
@@ -51,8 +51,8 @@ class Player{
 
         this.x += this.move_speed/3;
 
-        var walk1 = new DrawImage('images/walk//walking3.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
-        await walk1.draw;
+        var walk1 = new DrawImage();
+        await walk1.draw('images/walk//walking3.png', this.x, this.y, this.width, this.height, 0, -1, 0, false);
 
         await timeout(this.move_total_time/3);
         
@@ -70,8 +70,8 @@ class Player{
         await clear.draw;
 
         this.x -= this.move_speed/3;
-        var walk1 = new DrawImage('images/walk//walking1.png', this.x, this.y, this.width, this.height);
-        await walk1.draw;
+        var walk1 = new DrawImage();
+        await walk1.draw('images/walk//walking1.png', this.x, this.y, this.width, this.height);
 
         await timeout(this.move_total_time/3);
          
@@ -80,8 +80,8 @@ class Player{
 
         this.x -= this.move_speed/3;
 
-        var walk1 = new DrawImage('images/walk//walking2.png', this.x, this.y, this.width, this.height);
-        await walk1.draw;
+        var walk1 = new DrawImage();
+        await walk1.draw('images/walk//walking2.png', this.x, this.y, this.width, this.height);
 
         await timeout(this.move_total_time/3);
         
@@ -90,8 +90,8 @@ class Player{
 
         this.x -= this.move_speed/3;
 
-        var walk1 = new DrawImage('images/walk//walking3.png', this.x, this.y, this.width, this.height);
-        await walk1.draw;
+        var walk1 = new DrawImage();
+        await walk1.draw('images/walk//walking3.png', this.x, this.y, this.width, this.height);
 
         await timeout(this.move_total_time/3);
         
@@ -115,8 +115,8 @@ class Player{
         var clear = new Clear("background_test.jpg", this.x, (this.y-(canvas.height-1624)), this.width, this.height, this.x-(space/2), this.y-(space/2), this.width+(space/2),this.height+(space/2))
         await clear.draw;
 
-        var jump1 = new DrawImage('images/jump/jumping1.png', this.x, this.y, this.width, this.height, 0, flip, 0, false);
-        await jump1.draw;
+        var jump1 = new DrawImage();
+        await jump1.draw('images/jump/jumping1.png', this.x, this.y, this.width, this.height, 0, flip, 0, false);
         
         await timeout(150);
 
@@ -125,8 +125,8 @@ class Player{
         
         this.y -= 20;
 
-        var jump2 = new DrawImage('images/jump/jumping2.png', this.x, this.y, this.width, this.height, 0, flip, 0, false);
-        await jump2.draw;
+        var jump2 = new DrawImage();
+        await jump2.draw('images/jump/jumping2.png', this.x, this.y, this.width, this.height, 0, flip, 0, false);
 
         await timeout(150);
 
@@ -135,8 +135,8 @@ class Player{
         
         this.y += 20;
 
-        jump1 = new DrawImage('images/jump/jumping1.png', this.x, this.y, this.width, this.height, 0, flip, 0, false);
-        await jump1.draw;
+        jump1 = new DrawImage();
+        await jump1.draw('images/jump/jumping1.png', this.x, this.y, this.width, this.height, 0, flip, 0, false);
 
         await timeout(150);
 

@@ -45,10 +45,12 @@ class Button {
 }
 
 class DrawImage {
-    constructor(src, x, y, width=undefined, height=undefined, deg=undefined, flip=undefined, flop=undefined, center=undefined){
+    constructor(){
         this.image = new Image();
-        
-        this.draw = new Promise((resolve, reject) => {
+    }
+
+    draw(src, x, y, width=undefined, height=undefined, deg=undefined, flip=undefined, flop=undefined, center=undefined){
+        return new Promise(resolve => {
             this.image.onload = function() {
                 if ((width != undefined && height != undefined) && deg == undefined && flip == undefined && flop == undefined && center == undefined){
                     ctx.drawImage(this, x, y, width, height);    
@@ -148,8 +150,8 @@ async function on_start(){
     ctx.canvas.height = window.innerHeight - 35 ;
     // canvas.style.top = ((window.innerHeight/100) * 7) + "px";
     canvas.style.position = "relative";
-    background = new DrawImage("background_test.jpg", 0, canvas.height-1624)
-    await background.draw;
+    background = new DrawImage()
+    await background.draw("background_test.jpg", 0, canvas.height-1624);
     player = new Player(100, canvas.height - 300, 100, 100);
     player.stand()
 }
