@@ -302,7 +302,7 @@ async function on_start(){
 
         scroll = new Scroll((await background.pos)[1]);
         
-        player = new Player(100, 700, 100, 100);
+        player = new Player(100, canvas.height - 300, 100, 100);
 
         physics = new Physics();
 
