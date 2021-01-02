@@ -220,7 +220,7 @@ class keyBoard{
 
         setInterval(function(){
             that.checkKeys();
-         }, 100);
+         }, 150);
     }
 
     async checkKeys(){
@@ -271,17 +271,22 @@ class Clear{
     // dw = destention width
     // dh = destetnion height
     // "index.jpg", deleting_img.x - background.x, deleting_img.y - background.y, deleting_img.width, deleting_img.height, deleting_img.x, deleting_img.y, deleting_img.width , deleting_img.height
-    constructor(src, sx, sy, sw, sh, dx, dy, dw, dh){
-        this.replace = new Promise((resolve, reject) => {
-            var image = new Image();
+    constructor(){
+
+    }
+
+    replace(src, sx, sy, sw, sh, dx, dy, dw, dh){
+        var image = new Image();
+        return new Promise((resolve, reject) => {
+            
             image.onload = function(){
                ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
                resolve("Draw");
             }
             image.src = src;
 
-        
-        })
+            
+        });
     }
 }
 

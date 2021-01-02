@@ -22,25 +22,25 @@ async function load(){
         canvas.style.top = "-1000px";
 
         await on_start();
-        await new Promise(async resolve => {
-            var image;
-            for (let i = 0; i < 40; i++){
-                for (let i = 0; i < images.length; i++){
-                    image = new Image();
-                    var img = new DrawImage(image)
-                    await img.draw(images[i], -1000, -1000, 500, 500, 0, 0, 0, false);
-                }
-                if (i % 15 == 0) {
-                    player.moveToLeft();
-                    await player.jump();
-                } else if (i % 19 == 0){
-                    player.moveToRight();
-                    await player.jump();
-                }
+        // await new Promise(async resolve => {
+        //     var image;
+        //     for (let i = 0; i < 40; i++){
+        //         for (let i = 0; i < images.length; i++){
+        //             image = new Image();
+        //             var img = new DrawImage(image)
+        //             await img.draw(images[i], -1000, -1000, 500, 500, 0, 0, 0, false);
+        //         }
+        //         if (i % 15 == 0) {
+        //             player.moveToLeft();
+        //             await player.jump();
+        //         } else if (i % 19 == 0){
+        //             player.moveToRight();
+        //             await player.jump();
+        //         }
                 
-            }
-            resolve()
-        })
+        //     }
+        //     resolve()
+        // })
         
 
         canvas.style.left = "0px";
