@@ -1,20 +1,10 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext('2d');
-var dragging = false;
-var lastX;
-var marginTop = 0;
+var keys = []
 
+document.onkeyup = e => {keys.splice(keys.indexOf(e.keyCode), 1)}
 
-var image = new Image()
-image.onload = function () {
-    ctx.drawImage(this, 0, 0, 600,  600)
+document.onkeydown = function (event){
+    if (!keys.includes(event.keyCode) && [87, 68, 65].includes(event.keyCode)) keys.push(event.keyCode);
+
 }
-image.src = "image.jpg"
 
-
-addEventListener("wheel", function(event) {
-    marginTop -= 10;
-    canvas.style.marginTop = marginTop + "px";
-    console.log(canvas.style.marginTop);
-
-})
+setInterval(function(){ console.log(keys); }, 100);

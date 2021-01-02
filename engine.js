@@ -206,6 +206,39 @@ class DrawImage {
 
 }
 
+class keyBoard{
+    constructor(){
+        this.keys = []
+
+        var that = this;
+
+        document.onkeyup = e => {that.keys.splice(that.keys.indexOf(e.keyCode), 1)}
+
+        document.onkeydown = function (event){
+            if (!that.keys.includes(event.keyCode) && [87, 68, 65].includes(event.keyCode)) that.keys.push(event.keyCode);
+        }
+
+        setInterval(function(){
+            that.checkKeys();
+         }, 100);
+    }
+
+    async checkKeys(){
+        if (this.keys.includes(87) && !player.jumping){
+            // w is down
+            player.jump();
+        } 
+        if (this.keys.includes(68) && !player.move){
+            // d is down
+            player.moveToRight();
+        }
+        if (this.keys.includes(65) && !player.move){
+            // a is down
+            player.moveToLeft();
+        }
+    }
+}
+
 class Animation {
     constructor(images, background){
         this.draw = new Promise(async (resolve, reject) => {

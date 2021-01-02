@@ -48,36 +48,36 @@ async function load(){
 }
 
 load().then(() =>{
-
-    document.addEventListener('keydown', async function(evt){
-        evt = evt || window.event;
-        var charCode = evt.keyCode || evt.which;
-        var charStr = String.fromCharCode(charCode);
-         // to deal with IE
-        map[evt.keyCode] = evt.type == 'keydown';
+    var keyboard = new keyBoard();
+    // document.addEventListener('keydown', async function(evt){
+    //     evt = evt || window.event;
+    //     var charCode = evt.keyCode || evt.which;
+    //     var charStr = String.fromCharCode(charCode);
+    //      // to deal with IE
+    //     map[evt.keyCode] = evt.type == 'keydown';
     
-        if ((charStr == "a" || charStr =="A" || charStr == "ש") && !player.move) {
-            await player.moveToLeft();
-        } 
-    })
+    //     if ((charStr == "a" || charStr =="A" || charStr == "ש") && !player.move) {
+    //         await player.moveToLeft();
+    //     } 
+    // })
     
-    document.addEventListener('keydown', async function(evt){
-        evt = evt || window.event;
-        var charCode = evt.keyCode || evt.which;
-        var charStr = String.fromCharCode(charCode);
-        if((charStr == 'd' || charStr == 'D' || charStr == "ג") && !player.move) {
-            await player.moveToRight()
-        }
-    });
+    // document.addEventListener('keydown', async function(evt){
+    //     evt = evt || window.event;
+    //     var charCode = evt.keyCode || evt.which;
+    //     var charStr = String.fromCharCode(charCode);
+    //     if((charStr == 'd' || charStr == 'D' || charStr == "ג") && !player.move) {
+    //         await player.moveToRight()
+    //     }
+    // });
     
-    document.addEventListener('keydown', async function(evt){
-        evt = evt || window.event;
-        var charCode = evt.keyCode || evt.which;
-        var charStr = String.fromCharCode(charCode);
-        if((charStr == "w" || charStr == "W" || charStr == "'" )&& !player.jumping){
-            await player.jump();
-        } 
-    });
+    // document.addEventListener('keydown', async function(evt){
+    //     evt = evt || window.event;
+    //     var charCode = evt.keyCode || evt.which;
+    //     var charStr = String.fromCharCode(charCode);
+    //     if((charStr == "w" || charStr == "W" || charStr == "'" )&& !player.jumping){
+    //         await player.jump();
+    //     } 
+    // });
 });
 
 

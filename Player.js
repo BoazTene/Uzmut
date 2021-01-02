@@ -9,7 +9,7 @@ class Player{
         this.move_total_time = 400; // ms
         this.jump_height = 90;
         this.jump_time_ground = 160;
-        this.jump_time_air = 5000;
+        this.jump_time_air = 350;
 
         this.jumping = false;
         this.move = false;
@@ -135,9 +135,9 @@ class Player{
             this.jumping = true;
             var move = new Move(this, this.flip);
             var result = await move.jump();
-
+            
+            
             this.jumping = false;
-
             this.stand();
             resolve("done");
         })
@@ -253,16 +253,20 @@ class Move{
         
         var images = ['images/jump/jumping1.png', 'images/jump/jumping2.png', 'images/jump/jumping1.png']
         
-        await this.clear();
+        
 
         var image = new Image();
 
+        this.that.move = true;
+
         for (let i = 0; i < result[0]; i++){
+            await this.clear();
             if (i == 1){
                 scroll.scroll(this.that.jump_height/4);
                  this.that.y -= this.that.jump_height;
             }
             if (i == 2){
+                this.that.move = false;
                 scroll.scroll(-this.that.jump_height/4);
                 this.that.y += this.that.jump_height;
             } 
@@ -271,9 +275,10 @@ class Move{
 
             if (i != 1) await timeout(this.that.jump_time_ground); else await timeout(this.that.jump_time_air);
 
-            await this.clear();
+            
         }
-
+        await timeout(200)
+        await this.clear();
         return result[1]
     }
 }
