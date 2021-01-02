@@ -61,10 +61,12 @@ class Player{
         
     }
 
-    async clear(){
+    async clear(sx=this.x, sy=this.y-(canvas.height-1624), sw=this.width, sh=this.height, dx=this.x, dy=this.y, dw=this.width, dh=this.height){
         return new Promise(async resolve => {
             var clear = new Clear()
-            await clear.replace("background_test.jpg", this.x, this.y-(canvas.height-1624), this.width, this.height, this.x, this.y, this.width,this.height);
+            //, this.x, this.y-(canvas.height-1624), this.width, this.height, this.x, this.y, this.width, this.height
+            console.log(sx, sy, sw, sh, dx, dy, dw, dh)
+            await clear.replace("background_test.jpg", sx, sy, sw, sh, dx, dy, dw, dh);
             resolve("Clear");
         })
     }
@@ -73,13 +75,15 @@ class Player{
         this.jumping = true;
         console.log("fall")
         var jumps = Math.round(fall_distance/this.jump_height);
+        var that = Object.assign({}, this.that)
 
         await new Promise(async resolve => {
             scroll.scroll(this.y-100)
             for (let i = 0; i < jumps-1; i++){
-                await this.clear()
+                await this.clear(this.x, this.y-(canvas.height-1624), this.width, this.height, this.x, this.y, this.width, this.height)
 
                 this.y += this.jump_height;
+                that.y += this.jump_height;
                 scroll.scroll(-this.jump_height)
                 fall_distance -= this.jump_height;
                 var jump2 = new DrawImage();
@@ -92,9 +96,10 @@ class Player{
             resolve("finished")
         });
         
-        await this.clear()
+        await this.clear(this.x, this.y-(canvas.height-1624), this.width, this.height, this.x, this.y, this.width, this.height)
         
         this.y += fall_distance;
+        that.y += fall_distance;
  
         fall_distance -= fall_distance;
 
@@ -106,7 +111,7 @@ class Player{
 
         await timeout(150);
 
-        await this.clear()
+        await this.clear(this.x, this.y-(canvas.height-1624), this.width, this.height, this.x, this.y, this.width, this.height)
         this.jumping = false;
         this.stand()
     }
