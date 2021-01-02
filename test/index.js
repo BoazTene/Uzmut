@@ -2,7 +2,6 @@ var player = undefined;
 var background = undefined;
 var physics = undefined;
 var map = {};
-var scroll = undefined;
 
 
 async function load(){
@@ -19,7 +18,6 @@ async function load(){
         canvas.style.visibility = "visible";
 
         await on_start();
-        resolve("d")
         var image;
         for (let i = 0; i < 40; i++){
             for (let i = 0; i < images.length; i++){
@@ -28,18 +26,18 @@ async function load(){
                 await img.draw(images[i], -1000, -1000, 500, 500, 0, 0, 0, false);
             }
             if (i % 2 == 0) {
-                // player.moveToLeft();
-                // player.jump();
+                player.moveToLeft();
+                player.jump();
             } else {
-                // player.moveToRight();
-                // player.jump();
+                player.moveToRight();
+                player.jump();
             }
             
         }
 
         canvas.style.left = "0px";
         canvas.style.top = "0px";
-
+        
         canvas.style.visibility = "visible";
         document.getElementsByClassName("loader")[0].style.visibility = "hidden";
         resolve("Loading finished")
@@ -48,34 +46,35 @@ async function load(){
 }
 
 load().then(() =>{
+    
+    document.addEventListener('keypress', function(evt){
 
-    document.addEventListener('keydown', async function(evt){
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
          // to deal with IE
-        map[evt.keyCode] = evt.type == 'keydown';
+        map[evt.keyCode] = evt.type == 'keypress';
     
         if ((charStr == "a" || charStr =="A" || charStr == "ש") && !player.move) {
-            await player.moveToLeft();
+            player.moveToLeft();
         } 
     })
     
-    document.addEventListener('keydown', async function(evt){
+    document.addEventListener('keypress', function(evt){
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
         if((charStr == 'd' || charStr == 'D' || charStr == "ג") && !player.move) {
-            await player.moveToRight()
+            player.moveToRight()
         }
     });
     
-    document.addEventListener('keydown', async function(evt){
+    document.addEventListener('keypress', function(evt){
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
         if((charStr == "w" || charStr == "W" || charStr == "'" )&& !player.jumping){
-            await player.jump();
+            player.jump();
         } 
     });
 });
