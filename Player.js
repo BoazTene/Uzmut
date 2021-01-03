@@ -97,6 +97,7 @@ class Player{
         });
         
         await this.clear(this.x, this.y-(canvas.height-1624), this.width, this.height, this.x, this.y, this.width, this.height)
+        await this.clear()
         
         this.y += fall_distance;
         that.y += fall_distance;
@@ -301,7 +302,7 @@ class Move{
                     that.y += this.that.jump_height;
     
                 } 
-    
+                await this.clear();
                 await this.drawPlayer(images[i], image);
                 if (i != 1) await timeout(this.that.jump_time_ground); else await timeout(this.that.jump_time_air);
     
