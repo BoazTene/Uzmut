@@ -79,6 +79,7 @@ class Scroll{
     constructor(background_height){
         this.marginTop = window.innerHeight - 35 - canvas.height;
         this.background_height = background_height;
+        this.delta = 0;
         this.onStart()
 
         this.scroll(0);
@@ -91,7 +92,14 @@ class Scroll{
         divCanvas.style.height = window.innerHeight - 35  + "px";
     }
 
-    scroll(px){
+    scroll(px, fall=false){
+        if (fall && px + this.delta > 0) {
+            platform.generate1();
+            this.delta = 0;
+        } else {
+            this.delta += px;
+        }
+        
         if (this.marginTop + px < 0) {
             this.marginTop += px;
             canvas.style.marginTop = this.marginTop + "px";
@@ -112,7 +120,10 @@ class Rect{
     }
 
     draw(){
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        return new Promise(resolve => {
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+            resolve()
+        });
     }
 }
 
@@ -197,7 +208,6 @@ class DrawImage {
                     }
                 })
                 
-                console.log("resolve")
                 resolve("f");
             }
             this.image.src = src;
@@ -220,7 +230,7 @@ class keyBoard{
 
         setInterval(function(){
             that.checkKeys();
-         }, 100);
+         }, 50);
     }
 
     async checkKeys(){
@@ -271,19 +281,45 @@ class Clear{
     // dw = destention width
     // dh = destetnion height
     // "index.jpg", deleting_img.x - background.x, deleting_img.y - background.y, deleting_img.width, deleting_img.height, deleting_img.x, deleting_img.y, deleting_img.width , deleting_img.height
-    constructor(src, sx, sy, sw, sh, dx, dy, dw, dh){
-        this.replace = new Promise((resolve, reject) => {
-            var image = new Image();
+    constructor(){
+
+    }
+
+    replace(src, sx, sy, sw, sh, dx, dy, dw, dh){
+        var image = new Image();
+        return new Promise((resolve, reject) => {
+            
             image.onload = function(){
                ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
                resolve("Draw");
             }
             image.src = src;
 
-        
-        })
+            
+        });
     }
 }
+
+
+function play_sound(path) {
+    var url = "./" + path;
+    window.AudioContext = window.AudioContext||window.webkitAudioContext; //fix up prefixing
+    var context = new AudioContext(); //context
+    var source = context.createBufferSource(); //source node
+    source.connect(context.destination); //connect source to speakers so we can hear it
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true); 
+    request.responseType = 'arraybuffer'; //the  response is an array of bits
+    request.onload = function() {
+        context.decodeAudioData(request.response, function(response) {
+            source.buffer = response;
+            source.start(0); //play audio immediately
+            source.loop = true;
+        }, function () { console.error('The request failed.'); } );
+    }
+    request.send();
+}
+
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -300,13 +336,21 @@ async function on_start(){
         
         await background.draw()
 
+        player = new Player(400, canvas.height -300, 100, 100);
+
         scroll = new Scroll((await background.pos)[1]);
         
-        player = new Player(100, canvas.height - 300, 100, 100);
+        
 
         physics = new Physics();
+        physics1 = new Physics1();
 
         player.stand()
+
+        
+
+        platform = new PlatformGenerator(130, 40);
+        platform.generate(canvas.height - 300, true);
         resolve("done")
     })
 }

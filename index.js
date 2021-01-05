@@ -1,6 +1,8 @@
 var player = undefined;
 var background = undefined;
 var physics = undefined;
+var physics1 = undefined;
+var platform = undefined;
 var map = {};
 var scroll = undefined;
 
@@ -18,9 +20,10 @@ async function load(){
     return new Promise(async resolve => {
         canvas.style.visibility = "visible";
         canvas.style.position = "relative";
+        
         canvas.style.left = "-1000px";
         canvas.style.top = "-1000px";
-
+        
         await on_start();
         // await new Promise(async resolve => {
         //     var image;
@@ -47,7 +50,11 @@ async function load(){
         canvas.style.top = "0px";
 
         canvas.style.visibility = "visible";
+        
         document.getElementsByClassName("loader")[0].style.visibility = "hidden";
+
+        play_sound("music.mp3");
+
         resolve("Loading finished")
     })
     
