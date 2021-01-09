@@ -46,6 +46,107 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, width, height, ra
 } 
 
 
+function gameOver(){
+        return new Promise(async resolve => {
+            clearInterval(questions)
+            ctx.save()
+            ctx.fillStyle = "#0015ff";
+            ctx.font = '80px bold serif';
+            var width = ctx.measureText("Game Over").width;
+            var x = window.innerWidth/2-200;
+            var radius = 20;
+
+
+            var width_m = 250;
+            var height_m = 150;
+            var hover = false;
+            var x_m = x+70;
+            var y_m = (window.innerHeight/2);
+
+
+            // var y = canvas.height - (-scroll.marginTop + window.innerHeight/2) + 35;
+            // var width = 250 +35;
+            // var height = 150-50;
+            
+            
+            window.addEventListener("mousemove", mouseMove, false)
+
+
+            for (let i =  0; i < 40; i++){
+                ctx.globalAlpha = i/40;
+                ctx.fillStyle = "#0015ff";
+                ctx.font = '80px bold serif';
+                ctx.roundRect(x+width/2-125, -scroll.marginTop + window.innerHeight/2, 250, 70, 
+                        {upperLeft:radius, upperRight:radius, lowerRight:radius, lowerLeft:radius}, true, true);
+                ctx.fillText("Game Over", x, -scroll.marginTop + window.innerHeight/3)
+                ctx.strokeText("Game Over", x, -scroll.marginTop + window.innerHeight/3)
+                
+                ctx.fillStyle = "#000000";
+                ctx.font = '40px bold serif';
+                ctx.fillText("Play Again", x+width/2-125 + 30, -scroll.marginTop + window.innerHeight/2 + 45)
+
+
+                await timeout(50)
+            }
+       
+            window.addEventListener("mousedown", mouseDown, false);
+            // window.onmousedown = function (event) {
+            //     var hover = false;
+            //     if ((event.clientX < width_m+x_m && event.clientX > x_m ) &&  (event.clientY > y_m &&  event.clientY < y_m + height_m)) {
+            //             window.removeEventListener('onmousedown', this)
+            //             ctx.restore();
+            //             on_start();
+            //             resolve(true);
+            //     }
+            // }
+            function mouseMove(event) {
+                var hover = false;
+                if ((event.clientX < width_m+x_m && event.clientX > x_m ) &&  (event.clientY > y_m &&  event.clientY < y_m + height_m)) {
+                    canvas.style.cursor = "pointer"; 
+                    hover = true; 
+                }  
+                if (canvas.style.cursor == "pointer" && hover == false) {
+                    canvas.style.cursor = "auto";
+                    
+                }
+            }
+            function mouseDown(event){
+                var hover = false;
+                if ((event.clientX < width_m+x_m && event.clientX > x_m ) &&  (event.clientY > y_m &&  event.clientY < y_m + height_m)) {
+                        window.removeEventListener('mousedown', mouseDown)
+                        window.removeEventListener('mousemove', mouseMove)
+                        canvas.style.cursor = "auto";
+                        ctx.restore();
+                        on_start();
+                        resolve(true);
+                }
+            }
+
+        })
+}
+
+
+class File {
+    constructor(path){
+        this.path = path;
+    }
+
+    getData(){
+        return new Promise(resolve => {
+            var xhttp = new XMLHttpRequest();
+            var that = this;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    resolve(xhttp.responseText);
+                }
+            };
+            xhttp.open("GET", that.path, true);
+            xhttp.send();
+        })
+    }
+}       
+
+
 class Background{
     constructor(src){
         this.image = new Image();
@@ -55,6 +156,7 @@ class Background{
 
     get pos(){
         return new Promise(resolve =>{
+            
             var image = new Image();
             image.onload = function () {
                 resolve([this.width, this.height])
@@ -67,7 +169,9 @@ class Background{
         var that = this;
         return new Promise(resolve => {
             this.image.onload = async function () {
-                ctx.drawImage(this, 0, canvas.height - (await that.pos)[1]);
+                console.log(window.innerWidth,  (await that.pos))
+                
+                ctx.drawImage(this, 0, canvas.height - (await that.pos)[1], window.innerWidth, (await that.pos)[1]);
                 resolve("draw");
             }
             this.image.src = this.src;
@@ -94,7 +198,7 @@ class Scroll{
 
     scroll(px, fall=false){
         if (fall && px + this.delta > 0) {
-            platform.generate1();
+            // platform.generate1();
             this.delta = 0;
         } else {
             this.delta += px;
@@ -220,23 +324,31 @@ class keyBoard{
     constructor(){
         this.keys = []
 
+        this.jump_delay = undefined;
+
         var that = this;
 
         document.onkeyup = e => {that.keys.splice(that.keys.indexOf(e.keyCode), 1)}
 
         document.onkeydown = function (event){
             if (!that.keys.includes(event.keyCode) && [87, 68, 65].includes(event.keyCode)) that.keys.push(event.keyCode);
+            if (event.key == "'" ) return false;
+            if (event.key == "F5") {on_start(); return false};
+            return true;
         }
 
-        setInterval(function(){
+        this.interval = setInterval(function(){
             that.checkKeys();
-         }, 50);
+         }, 20);
     }
 
     async checkKeys(){
         if (this.keys.includes(87) && !player.jumping){
             // w is down
-            player.jump();
+            if (this.jump_delay == undefined || performance.now() - this.jump_delay > 1300 ){
+                player.jump();
+                this.jump_delay = performance.now()
+            }
         } 
         if (this.keys.includes(68) && !player.move){
             // d is down
@@ -327,30 +439,43 @@ function timeout(ms) {
 
 async function on_start(){
     return new Promise(async resolve => {
+        
         canvas.style.position = "relative";
         
-        var background = new Background('background_test.jpg');
-
+        background = new Background('background_test.jpg');
+        
         ctx.canvas.width  = window.innerWidth - 30 ;
+        
         ctx.canvas.height = (await background.pos)[1];
         
-        await background.draw()
-
-        player = new Player(400, canvas.height -300, 100, 100);
+        await background.draw();
+        
+        player = new Player(400, canvas.height - 500, 100, 100);
 
         scroll = new Scroll((await background.pos)[1]);
         
-        
-
         physics = new Physics();
         physics1 = new Physics1();
-
-        player.stand()
-
         
+        player.stand();
 
-        platform = new PlatformGenerator(130, 40);
-        platform.generate(canvas.height - 300, true);
-        resolve("done")
+        questions = setInterval(async function(){
+            var question = new Question();
+            await question.random_question()
+            var result = await question.draw()
+            if (!result) {gameOver()}
+        }, 9000);
+
+        // var rect = new Rect(10, 2000, 16, 9, 20)
+        // rect.setColor("#FF0000")
+        // await rect.draw()
+
+        // window.onmousemove = function (event) {
+        //     console.log("x:", event.clientX, "y:", event.clientY);
+        // }   
+
+        // platform = new PlatformGenerator(130, 40);
+        // platform.generate(canvas.height - 300, true);
+        resolve("done");
     })
 }

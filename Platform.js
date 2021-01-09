@@ -52,7 +52,8 @@ class PlatformGenerator{
         }
 
         if (start) x = canvas.width/2;
-
+        x = 20;
+        y = 1995;
         var platform = new Platform(x, y, this.width, this.height);
         await platform.draw();
         physics.NOT_PERMITTED.push([x, y, this.width, this.height])
@@ -60,7 +61,9 @@ class PlatformGenerator{
         
         this.last_x = x;
         this.last_y = y;
+        console.log(physics1.NOT_PERMITTED)
         
+         
         while (y-starting_y > -window.innerHeight+400){
             y -= Math.random() * 10 + 100;
             x = Math.random() * (( x+200 )- (x-200)) - x-200;
@@ -73,9 +76,11 @@ class PlatformGenerator{
             await platform.draw();
 
             physics1.NOT_PERMITTED.push([x, y, this.width, this.height])
-            
+            console.log(x, y)
             this.last_x = x;
             this.last_y = y;
         }
+
+        console.log(physics1.NOT_PERMITTED)
     }
 }

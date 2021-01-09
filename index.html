@@ -4,13 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
+    <style id="style"></style>
     <title>Document</title>
 </head>
 <body>
-    <div id="div-canvas" style="max-height: 400px;max-width:2000px;overflow: hidden;">
-        <canvas id="canvas" width="600" height="600" style= "visibility: hidden;"></canvas>
+
+    
+    <div id="div-canvas" style="overflow: hidden;">
+        <canvas id="canvas" width="600" height="600" style= "visibility: hidden; "></canvas>
     </div>  
+    
+    <!-- <canvas id="question" width="600" height="600" style= "overflow: hidden; visibility: hidden;"></canvas> -->
+
+    
     <div class="loader"></div>
+
+    <div class="callout">
+        <div class="callout-header">How To Play</div>
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">×</span>
+        <div class="callout-container">
+            <p>Movment: </br>Jump: 'w', Move right: 'd', Move left: 'a'</p>
+        </div>
+    </div>
+
+    
+
 
     <script src="engine.js"></script>
     <script src="Question.js"></script>

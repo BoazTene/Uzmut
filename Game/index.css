@@ -1,3 +1,5 @@
+
+
 #canvas {
     border-color: black;
     /* border-radius: 4%; */
@@ -6,6 +8,7 @@
     left: 1000px;
     top: 1000px;
   }
+
 
 .loader {
     border: 16px solid #f3f3f3;

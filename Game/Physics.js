@@ -46,14 +46,100 @@ class Physics1{
     
     constructor(){
         this.NOT_PERMITTED = [
-            [0, canvas.height, canvas.width, 300]
+            [0, canvas.height, canvas.width, 500], 
+            [878, 28443, 400, 45],
+            [1038, 28274, 400, 45], 
+            [1338, 28079, 400, 45], 
+            [1318, 27934, 400, 45], 
+            [1358, 27683, 400, 45], 
+            [472, 27473, 800, 45], 
+            [0, 27283, 400, 45], 
+            [558, 27068, 400, 45], 
+            [1138, 26867, 400, 45], 
+            [838, 26625, 400, 45], 
+            [608, 26391, 400, 45], 
+            [1134, 26160, 550, 45], 
+            [1713, 25925, 400, 45], 
+            [1384, 25685, 400, 45], 
+            [721, 25449, 600, 45], 
+            [371, 25214, 400, 45], 
+            [880, 24977, 770, 45], 
+            [1694, 24749, 400, 45], 
+            [410, 24742, 400, 45], 
+            [31, 24506, 400, 45], 
+            [1408, 24268, 400, 45], 
+            [1900, 24027, 400, 45], 
+            [1600, 23786, 400, 45], 
+            [1964, 23545, 400, 45], 
+            [1728, 23304, 400, 45], 
+            [1200, 23123, 400, 45], 
+            [461, 24268, 400, 45], 
+            [64, 24030, 400, 45], 
+            [934, 22948, 400, 45],
+            [342, 22784, 400, 45],
+            [803, 22550, 400, 45],
+            [1348, 22311, 400, 45],
+            [1442, 22074, 400, 45],
+            [876, 21845, 400, 45],
+            [1449, 21613, 400, 45],
+            [868, 21381, 400, 45],
+            [1441, 21149, 400, 45],
+            [895, 20909, 400, 45],
+            [1468, 20677, 400, 45],
+            [1427, 20439, 400, 45],
+            [2007, 20237, 400, 45],
+            [1707, 19996, 400, 45],
+            [1477, 19762, 400, 45],
+            [1026, 19617, 400, 45],
+            [647, 19381, 400, 45],
+            [1077, 19143, 400, 45],
+            [680, 18905, 400, 45],
+            [1184, 18626, 300, 45],
+            [1654, 18385, 300, 45],
+            [2053, 18144, 300, 45],
+            [2094, 17903, 300, 45],
+            [2064, 17759, 300, 45],
+            [2107, 17518, 300, 45],
+            [1748, 17289, 300, 45],
+            [1450, 17518, 300, 45],
+            [1150, 17804, 300, 45],
+            [988, 18058, 300, 45],
+            [680, 18340, 300, 45],
+            [380, 18104, 300, 45],
+            [172, 17868, 300, 45],
+            [0, 17631, 300, 45],
+            [380, 17429, 300, 45],
+            [810, 17192, 300, 45],
+            [17192, 16956, 300, 45],
+            [1338, 16738, 300, 45],
+            [1841, 16501, 300, 45],
+            [1350, 16263, 300, 45],
+            [1827, 16029, 300, 45],
+            [2107, 15788, 300, 45],
+            [2020, 15499, 300, 45],
+            [1577, 15272, 300, 45],
+            [2057, 15031, 300, 45],
+            [1568, 14790, 300, 45],
+            [1078, 14549, 300, 45],
+            [584, 14310, 300, 45]
+            
         ]
         this.ml = 50;
         this.fall = false;
-        setInterval(this.check, this.ml, this)
+        this.jump = undefined;
+        this.scale()
+        this.interval = setInterval(this.check, this.ml, this)
     }
 
-    check_fall(location){
+    async scale(){
+        for (let i = 0; i < this.NOT_PERMITTED.length; i++){
+            this.NOT_PERMITTED[i][0] /= ((await background.pos)[0]/(window.innerWidth))
+            this.NOT_PERMITTED[i][2] /= ((await background.pos)[0]/(window.innerWidth))
+        }
+    }
+
+    check_fall(location, jump=false){
+        if (!jump && player.jumping) return false
         var x = player.x + player.width;
         var x1 = player.x;
         // if (player.flip) x = player.x ;
@@ -91,14 +177,15 @@ class Physics1{
 
     calc_fall_height(location){
         return Math.abs(player.y- (location[1] - location[3]));
+        // return Math.abs((player.y+player.width)- );
     }
 
     check_hit(location){
+        return false
         var space = 30;
 
         var x = player.x - space/2;
-        var y = player.y 
-        ;
+        var y = player.y    ;
         var width = player.width ;
         if (player.flip) x = player.x + width + space/2;
 
@@ -131,17 +218,18 @@ class Physics1{
         if (x[1] > y[1] && player.y < location[1]) return y[0]; else return x[0];
     }
 
-    check(that){
-        return new Promise(resolve => {
-            var fall = [that.check_fall(that.NOT_PERMITTED[0]),  0, that.calc_fall_height(that.NOT_PERMITTED[0])]
+    check(that, jump=false){
+        return new Promise(async resolve => {
+            var fall = [that.check_fall(that.NOT_PERMITTED[0], jump),  0, that.calc_fall_height(that.NOT_PERMITTED[0])]
             var hit = [that.check_hit(that.NOT_PERMITTED[0]), that.find_closest_line(that.NOT_PERMITTED[0])]
             for (let i = 1; i < that.NOT_PERMITTED.length; i++){
-                if (that.check_fall(that.NOT_PERMITTED[i]) && that.calc_fall_height(that.NOT_PERMITTED[i]) < fall[2]){
+                if (that.check_fall(that.NOT_PERMITTED[i], jump) && that.calc_fall_height(that.NOT_PERMITTED[i]) < fall[2]){
                     fall = [true, i, that.calc_fall_height(that.NOT_PERMITTED[i]) ];
                 }
                 if(that.check_hit(that.NOT_PERMITTED[i])) hit = [true, that.find_closest_line(that.NOT_PERMITTED[i])]
             }
 
+            if (player.jumping && that.jump != undefined & performance.now() - that.jump > 2000){player.jumping = false; that.jump = undefined;}
             if (hit[0]) {player.physics_stop = true;} else player.physics_stop = false;
             if (fall[1] != 0) fall[2] -= 70;
             if (fall[0] && !that.fall && fall[2] != 0 && fall[2] != player.jump_height){
@@ -149,16 +237,17 @@ class Physics1{
                 player.physics_stop_jump = true;
                 that.fall = true;
                 // player.y += fall[2]-player.jump_height;
-                player.fall(fall[2])
-                
+                await player.fall(fall[2])
+                if (jump) resolve(false)
+
                 // player.fall(fall[1])
-            } else {
-                
-                
-            }
+            } 
+            if (player.x < -30) player.x = canvas.width + 30  
+            if (player.x > canvas.width + 30) player.x = -30      
+            if (jump) resolve(false)
             resolve()
-            })
-            }
+        })
+    }
             
         
 }

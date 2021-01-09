@@ -5,6 +5,8 @@ var physics1 = undefined;
 var platform = undefined;
 var map = {};
 var scroll = undefined;
+var keyboard = undefined;
+var questions = undefined;
 
 
 async function load(){
@@ -17,7 +19,9 @@ async function load(){
 
     
 
-    return new Promise(async resolve => {
+    return new Promise(async (resolve, reject) => {
+        
+
         canvas.style.visibility = "visible";
         canvas.style.position = "relative";
         
@@ -25,6 +29,7 @@ async function load(){
         canvas.style.top = "-1000px";
         
         await on_start();
+        
         // await new Promise(async resolve => {
         //     var image;
         //     for (let i = 0; i < 40; i++){
@@ -45,23 +50,30 @@ async function load(){
         //     resolve()
         // })
         
-
+        
+        
         canvas.style.left = "0px";
         canvas.style.top = "0px";
 
         canvas.style.visibility = "visible";
         
+        canvas.style.position = "relative";
+
         document.getElementsByClassName("loader")[0].style.visibility = "hidden";
+
+
+        
 
         play_sound("music.mp3");
 
-        resolve("Loading finished")
+
+        resolve("Loading finished");
     })
     
 }
 
-load().then(() =>{
-    var keyboard = new keyBoard();
+load().then(async () =>{
+    keyboard = new keyBoard();
 });
 
 
